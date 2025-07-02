@@ -9,36 +9,37 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
 import { Label } from "@/components/ui/label";
+import { Heart, MessageCircle, Share2, Sparkles } from "lucide-react";
 
 const ProfessionalFeed = () => {
   const [posts, setPosts] = useState([
     {
       id: 1,
       author: "Priscila Zillo",
-      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face",
-      title: "Transformação Completa - Cliente Maria",
-      description: "De 0 a R$ 15.000 em 3 meses! Veja como a Maria transformou sua vida digital com nossa mentoria exclusiva.",
-      beforeImage: "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=400&h=300&fit=crop",
-      afterImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop",
-      category: "Transformação Digital",
+      avatar: "https://images.unsplash.com/photo-1559599101-f09722fb4948?w=150&h=150&fit=crop&crop=face",
+      title: "Harmonização Facial Completa",
+      description: "Transformação incrível com preenchimento labial e contorno facial. A cliente ganhou autoestima e confiança para conquistar seus sonhos! ✨",
+      beforeImage: "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=400&h=500&fit=crop&crop=face",
+      afterImage: "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=400&h=500&fit=crop&crop=face",
+      category: "Harmonização Facial",
       likes: 128,
       comments: 24,
       timestamp: "2h atrás",
-      results: "R$ 15.000 em vendas"
+      results: "Autoestima renovada"
     },
     {
       id: 2,
-      author: "Ana Silva",
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b789?w=150&h=150&fit=crop&crop=face",
-      title: "Resultado Extraordinário - Cliente João",
-      description: "Do zero ao primeiro R$ 50.000! Acompanhe a jornada completa de transformação digital do João.",
-      beforeImage: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop",
-      afterImage: "https://images.unsplash.com/photo-1553028826-f4804a6dba3b?w=400&h=300&fit=crop",
-      category: "Negócio Digital",
+      author: "Dra. Ana Silva",
+      avatar: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=150&h=150&fit=crop&crop=face",
+      title: "Limpeza de Pele Profunda",
+      description: "Resultado surpreendente! Pele completamente renovada e radiante. Tratamento personalizado que transformou a textura e luminosidade da pele.",
+      beforeImage: "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=400&h=500&fit=crop&crop=face",
+      afterImage: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=400&h=500&fit=crop&crop=face",
+      category: "Skincare",
       likes: 89,
       comments: 15,
       timestamp: "5h atrás",
-      results: "R$ 50.000 em faturamento"
+      results: "Pele renovada"
     }
   ]);
 
@@ -57,7 +58,7 @@ const ProfessionalFeed = () => {
       const post = {
         id: posts.length + 1,
         author: "Você",
-        avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face",
+        avatar: "https://images.unsplash.com/photo-1559599101-f09722fb4948?w=150&h=150&fit=crop&crop=face",
         title: newPost.title,
         description: newPost.description,
         beforeImage: newPost.beforeImage,
@@ -78,180 +79,190 @@ const ProfessionalFeed = () => {
   };
 
   return (
-    <div className="min-h-screen p-6 md:p-12 bg-gradient-to-br from-gray-900 via-purple-900/20 to-pink-900/20">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-12">
-          <div>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
-              Feed de Transformações
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/10 to-pink-900/10">
+      <div className="px-4 sm:px-6 lg:px-12 py-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Header Mobile Optimized */}
+          <div className="text-center mb-8">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+              Transformações Reais
             </h1>
-            <p className="text-gray-300 text-lg">Inspire-se com resultados reais de nossas clientes</p>
-          </div>
-          
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold px-8 py-4 shadow-2xl transform hover:scale-105 transition-all duration-300">
-                ✨ Compartilhar Transformação
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="bg-gray-900/95 border-purple-500/30 backdrop-blur-xl max-w-2xl">
-              <DialogHeader>
-                <DialogTitle className="text-white text-2xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
-                  Compartilhar Nova Transformação
-                </DialogTitle>
-              </DialogHeader>
-              <form onSubmit={handleSubmitPost} className="space-y-6">
-                <div className="space-y-2">
-                  <Label className="text-white font-semibold">Título da Transformação</Label>
-                  <Input
-                    placeholder="Ex: Cliente alcançou R$ 20.000 em 2 meses..."
-                    value={newPost.title}
-                    onChange={(e) => setNewPost({...newPost, title: e.target.value})}
-                    className="bg-gray-800/80 border-purple-500/30 text-white placeholder-gray-400"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label className="text-white font-semibold">Descrição da Jornada</Label>
-                  <Textarea
-                    placeholder="Conte a história completa da transformação..."
-                    value={newPost.description}
-                    onChange={(e) => setNewPost({...newPost, description: e.target.value})}
-                    className="bg-gray-800/80 border-purple-500/30 text-white placeholder-gray-400 min-h-24"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-white font-semibold">Categoria</Label>
-                    <Input
-                      placeholder="Ex: Transformação Digital..."
-                      value={newPost.category}
-                      onChange={(e) => setNewPost({...newPost, category: e.target.value})}
-                      className="bg-gray-800/80 border-purple-500/30 text-white placeholder-gray-400"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label className="text-white font-semibold">Resultado Alcançado</Label>
-                    <Input
-                      placeholder="Ex: R$ 25.000 em vendas..."
-                      value={newPost.results}
-                      onChange={(e) => setNewPost({...newPost, results: e.target.value})}
-                      className="bg-gray-800/80 border-purple-500/30 text-white placeholder-gray-400"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-white font-semibold">Imagem - Antes</Label>
-                    <Input
-                      placeholder="URL da imagem do antes..."
-                      value={newPost.beforeImage}
-                      onChange={(e) => setNewPost({...newPost, beforeImage: e.target.value})}
-                      className="bg-gray-800/80 border-purple-500/30 text-white placeholder-gray-400"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label className="text-white font-semibold">Imagem - Depois</Label>
-                    <Input
-                      placeholder="URL da imagem do depois..."
-                      value={newPost.afterImage}
-                      onChange={(e) => setNewPost({...newPost, afterImage: e.target.value})}
-                      className="bg-gray-800/80 border-purple-500/30 text-white placeholder-gray-400"
-                    />
-                  </div>
-                </div>
-
-                <Button type="submit" className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 w-full font-bold py-3 shadow-xl">
-                  ✨ Publicar Transformação
+            <p className="text-gray-300 text-base sm:text-lg max-w-2xl mx-auto mb-6">
+              Inspire-se com resultados incríveis dos nossos tratamentos estéticos
+            </p>
+            
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold px-6 py-3 text-sm sm:text-base shadow-2xl transform hover:scale-105 transition-all duration-300 w-full sm:w-auto">
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  Compartilhar Resultado
                 </Button>
-              </form>
-            </DialogContent>
-          </Dialog>
-        </div>
-
-        <div className="space-y-8">
-          {posts.map((post) => (
-            <Card key={post.id} className="bg-gray-900/60 border-purple-500/20 backdrop-blur-xl shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 overflow-hidden">
-              <CardHeader className="pb-4">
-                <div className="flex items-center gap-4">
-                  <Avatar className="w-16 h-16 ring-4 ring-pink-500/30">
-                    <AvatarImage src={post.avatar} />
-                    <AvatarFallback className="bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold">
-                      {post.author[0]}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1">
-                    <h3 className="text-white font-bold text-lg">{post.author}</h3>
-                    <p className="text-gray-400">{post.timestamp}</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <Badge className="bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold">
-                      {post.category}
-                    </Badge>
-                    {post.results && (
-                      <Badge className="bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold">
-                        {post.results}
-                      </Badge>
-                    )}
-                  </div>
-                </div>
-              </CardHeader>
-              
-              <CardContent className="space-y-6">
-                <div>
-                  <h4 className="text-white font-bold text-xl mb-3 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
-                    {post.title}
-                  </h4>
-                  <p className="text-gray-300 leading-relaxed">{post.description}</p>
-                </div>
-                
-                {/* Before and After Images */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="relative group">
-                    <div className="absolute -top-3 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold z-10 shadow-lg">
-                      ANTES
-                    </div>
-                    <div className="rounded-xl overflow-hidden border-2 border-red-500/30 shadow-2xl group-hover:scale-105 transition-transform duration-300">
-                      <img 
-                        src={post.beforeImage} 
-                        alt="Antes"
-                        className="w-full h-64 object-cover"
-                      />
-                    </div>
+              </DialogTrigger>
+              <DialogContent className="bg-gray-900/95 border-purple-500/30 backdrop-blur-xl max-w-lg mx-4 sm:max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle className="text-white text-xl sm:text-2xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+                    Compartilhar Nova Transformação
+                  </DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSubmitPost} className="space-y-4 sm:space-y-6">
+                  <div className="space-y-2">
+                    <Label className="text-white font-semibold text-sm">Título do Tratamento</Label>
+                    <Input
+                      placeholder="Ex: Harmonização Facial Completa..."
+                      value={newPost.title}
+                      onChange={(e) => setNewPost({...newPost, title: e.target.value})}
+                      className="bg-gray-800/80 border-purple-500/30 text-white placeholder-gray-400 text-sm"
+                    />
                   </div>
                   
-                  <div className="relative group">
-                    <div className="absolute -top-3 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold z-10 shadow-lg">
-                      DEPOIS
+                  <div className="space-y-2">
+                    <Label className="text-white font-semibold text-sm">Descrição do Resultado</Label>
+                    <Textarea
+                      placeholder="Conte sobre a transformação da cliente..."
+                      value={newPost.description}
+                      onChange={(e) => setNewPost({...newPost, description: e.target.value})}
+                      className="bg-gray-800/80 border-purple-500/30 text-white placeholder-gray-400 min-h-20 text-sm"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-white font-semibold text-sm">Categoria</Label>
+                      <Input
+                        placeholder="Ex: Harmonização Facial..."
+                        value={newPost.category}
+                        onChange={(e) => setNewPost({...newPost, category: e.target.value})}
+                        className="bg-gray-800/80 border-purple-500/30 text-white placeholder-gray-400 text-sm"
+                      />
                     </div>
-                    <div className="rounded-xl overflow-hidden border-2 border-green-500/30 shadow-2xl group-hover:scale-105 transition-transform duration-300">
-                      <img 
-                        src={post.afterImage} 
-                        alt="Depois"
-                        className="w-full h-64 object-cover"
+                    
+                    <div className="space-y-2">
+                      <Label className="text-white font-semibold text-sm">Resultado</Label>
+                      <Input
+                        placeholder="Ex: Autoestima renovada..."
+                        value={newPost.results}
+                        onChange={(e) => setNewPost({...newPost, results: e.target.value})}
+                        className="bg-gray-800/80 border-purple-500/30 text-white placeholder-gray-400 text-sm"
                       />
                     </div>
                   </div>
-                </div>
 
-                <div className="flex items-center gap-8 pt-4 border-t border-purple-500/20">
-                  <Button variant="ghost" size="sm" className="text-pink-400 hover:text-pink-300 hover:bg-pink-500/10 font-semibold">
-                    💖 {post.likes} curtidas
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-white font-semibold text-sm">Foto - Antes</Label>
+                      <Input
+                        placeholder="URL da foto antes..."
+                        value={newPost.beforeImage}
+                        onChange={(e) => setNewPost({...newPost, beforeImage: e.target.value})}
+                        className="bg-gray-800/80 border-purple-500/30 text-white placeholder-gray-400 text-sm"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label className="text-white font-semibold text-sm">Foto - Depois</Label>
+                      <Input
+                        placeholder="URL da foto depois..."
+                        value={newPost.afterImage}
+                        onChange={(e) => setNewPost({...newPost, afterImage: e.target.value})}
+                        className="bg-gray-800/80 border-purple-500/30 text-white placeholder-gray-400 text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  <Button type="submit" className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 w-full font-bold py-3 shadow-xl text-sm">
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    Publicar Transformação
                   </Button>
-                  <Button variant="ghost" size="sm" className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 font-semibold">
-                    💬 {post.comments} comentários
-                  </Button>
-                  <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-300 hover:bg-gray-500/10 font-semibold">
-                    📤 Compartilhar
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </form>
+              </DialogContent>
+            </Dialog>
+          </div>
+
+          {/* Posts Feed - Mobile Optimized */}
+          <div className="space-y-6">
+            {posts.map((post) => (
+              <Card key={post.id} className="bg-gray-900/80 border-purple-500/20 backdrop-blur-xl shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 overflow-hidden">
+                <CardHeader className="pb-3 px-4 sm:px-6">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="w-12 h-12 sm:w-14 sm:h-14 ring-2 ring-pink-500/30">
+                      <AvatarImage src={post.avatar} />
+                      <AvatarFallback className="bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold text-sm">
+                        {post.author[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-white font-bold text-sm sm:text-base truncate">{post.author}</h3>
+                      <p className="text-gray-400 text-xs sm:text-sm">{post.timestamp}</p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-1 sm:gap-2">
+                      <Badge className="bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold text-xs px-2 py-1">
+                        {post.category}
+                      </Badge>
+                      {post.results && (
+                        <Badge className="bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold text-xs px-2 py-1">
+                          {post.results}
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                </CardHeader>
+                
+                <CardContent className="space-y-4 px-4 sm:px-6">
+                  <div>
+                    <h4 className="text-white font-bold text-lg sm:text-xl mb-2 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+                      {post.title}
+                    </h4>
+                    <p className="text-gray-300 leading-relaxed text-sm sm:text-base">{post.description}</p>
+                  </div>
+                  
+                  {/* Before and After Images - Mobile Optimized */}
+                  <div className="space-y-4">
+                    <div className="relative group">
+                      <div className="absolute -top-2 left-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold z-10 shadow-lg">
+                        ANTES
+                      </div>
+                      <div className="rounded-xl overflow-hidden border-2 border-red-500/30 shadow-xl group-hover:scale-[1.02] transition-transform duration-300">
+                        <img 
+                          src={post.beforeImage} 
+                          alt="Antes do tratamento"
+                          className="w-full h-48 sm:h-64 object-cover"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="relative group">
+                      <div className="absolute -top-2 left-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold z-10 shadow-lg">
+                        DEPOIS
+                      </div>
+                      <div className="rounded-xl overflow-hidden border-2 border-green-500/30 shadow-xl group-hover:scale-[1.02] transition-transform duration-300">
+                        <img 
+                          src={post.afterImage} 
+                          alt="Depois do tratamento"
+                          className="w-full h-48 sm:h-64 object-cover"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Interaction Buttons - Mobile Optimized */}
+                  <div className="flex items-center justify-between pt-3 border-t border-purple-500/20">
+                    <Button variant="ghost" size="sm" className="text-pink-400 hover:text-pink-300 hover:bg-pink-500/10 font-semibold text-xs sm:text-sm flex-1 mx-1">
+                      <Heart className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                      {post.likes}
+                    </Button>
+                    <Button variant="ghost" size="sm" className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 font-semibold text-xs sm:text-sm flex-1 mx-1">
+                      <MessageCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                      {post.comments}
+                    </Button>
+                    <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-300 hover:bg-gray-500/10 font-semibold text-xs sm:text-sm flex-1 mx-1">
+                      <Share2 className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                      Compartilhar
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </div>
     </div>
