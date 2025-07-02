@@ -8,8 +8,24 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
+import { Label } from "@/components/ui/label";
 
-const AdminPanel = () => {
+interface AppSettings {
+  heroImage: string;
+  title: string;
+  subtitle: string;
+  badge: string;
+  primaryButtonText: string;
+  secondaryButtonText: string;
+  primaryButtonColor: string;
+}
+
+interface AdminPanelProps {
+  appSettings: AppSettings;
+  setAppSettings: (settings: AppSettings) => void;
+}
+
+const AdminPanel = ({ appSettings, setAppSettings }: AdminPanelProps) => {
   const [services, setServices] = useState([
     { id: 1, title: "Digital Anime", category: "Design", status: "Ativo", price: "R$ 150" },
     { id: 2, title: "Portfólio Premium", category: "Portfolio", status: "Ativo", price: "R$ 300" },
@@ -28,6 +44,24 @@ const AdminPanel = () => {
     price: "",
     description: ""
   });
+
+  const [tempSettings, setTempSettings] = useState(appSettings);
+
+  const colorOptions = [
+    { name: "Rosa", value: "bg-pink-500 hover:bg-pink-600" },
+    { name: "Azul", value: "bg-blue-500 hover:bg-blue-600" },
+    { name: "Verde", value: "bg-green-500 hover:bg-green-600" },
+    { name: "Roxo", value: "bg-purple-500 hover:bg-purple-600" },
+    { name: "Laranja", value: "bg-orange-500 hover:bg-orange-600" }
+  ];
+
+  const handleSaveSettings = () => {
+    setAppSettings(tempSettings);
+    toast({
+      title: "Configurações salvas!",
+      description: "As alterações foram aplicadas com sucesso.",
+    });
+  };
 
   const handleAddService = (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,8 +95,11 @@ const AdminPanel = () => {
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold text-white mb-8">Painel Administrativo</h1>
 
-        <Tabs defaultValue="services" className="space-y-6">
+        <Tabs defaultValue="appearance" className="space-y-6">
           <TabsList className="bg-gray-800 border-gray-700">
+            <TabsTrigger value="appearance" className="text-white data-[state=active]:bg-pink-500">
+              Aparência
+            </TabsTrigger>
             <TabsTrigger value="services" className="text-white data-[state=active]:bg-pink-500">
               Serviços
             </TabsTrigger>
@@ -73,6 +110,98 @@ const AdminPanel = () => {
               Analytics
             </TabsTrigger>
           </TabsList>
+
+          {/* Appearance Settings */}
+          <TabsContent value="appearance" className="space-y-6">
+            <Card className="bg-gray-900/50 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-white">Personalizar Aparência</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-2">
+                  <Label className="text-white">Imagem do Topo</Label>
+                  <Input
+                    placeholder="URL da imagem..."
+                    value={tempSettings.heroImage}
+                    onChange={(e) => setTempSettings({...tempSettings, heroImage: e.target.value})}
+                    className="bg-gray-800 border-gray-600 text-white"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-white">Título Principal</Label>
+                  <Input
+                    placeholder="Seu nome..."
+                    value={tempSettings.title}
+                    onChange={(e) => setTempSettings({...tempSettings, title: e.target.value})}
+                    className="bg-gray-800 border-gray-600 text-white"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-white">Subtítulo</Label>
+                  <Textarea
+                    placeholder="Sua descrição..."
+                    value={tempSettings.subtitle}
+                    onChange={(e) => setTempSettings({...tempSettings, subtitle: e.target.value})}
+                    className="bg-gray-800 border-gray-600 text-white"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-white">Badge</Label>
+                  <Input
+                    placeholder="Texto do badge..."
+                    value={tempSettings.badge}
+                    onChange={(e) => setTempSettings({...tempSettings, badge: e.target.value})}
+                    className="bg-gray-800 border-gray-600 text-white"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-white">Botão Principal</Label>
+                    <Input
+                      placeholder="Texto do botão..."
+                      value={tempSettings.primaryButtonText}
+                      onChange={(e) => setTempSettings({...tempSettings, primaryButtonText: e.target.value})}
+                      className="bg-gray-800 border-gray-600 text-white"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label className="text-white">Botão Secundário</Label>
+                    <Input
+                      placeholder="Texto do botão..."
+                      value={tempSettings.secondaryButtonText}
+                      onChange={(e) => setTempSettings({...tempSettings, secondaryButtonText: e.target.value})}
+                      className="bg-gray-800 border-gray-600 text-white"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-white">Cor do Botão Principal</Label>
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+                    {colorOptions.map((color) => (
+                      <Button
+                        key={color.name}
+                        variant={tempSettings.primaryButtonColor === color.value ? "default" : "outline"}
+                        className={`${color.value} text-white border-gray-600`}
+                        onClick={() => setTempSettings({...tempSettings, primaryButtonColor: color.value})}
+                      >
+                        {color.name}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                <Button onClick={handleSaveSettings} className="bg-green-500 hover:bg-green-600 w-full">
+                  Salvar Alterações
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           {/* Services Management */}
           <TabsContent value="services" className="space-y-6">
@@ -208,10 +337,10 @@ const AdminPanel = () => {
               
               <Card className="bg-gray-900/50 border-gray-700">
                 <CardHeader>
-                  <CardTitle className="text-white">Receita Mensal</CardTitle>
+                  <CardTitle className="text-white">Clicks nos Links</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-3xl font-bold text-blue-400">R$ 2.850</p>
+                  <p className="text-3xl font-bold text-blue-400">1.240</p>
                 </CardContent>
               </Card>
               
