@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
 import { Label } from "@/components/ui/label";
-import { Heart, MessageCircle, Share2, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 const ProfessionalFeed = () => {
   const [posts, setPosts] = useState([
@@ -22,8 +22,6 @@ const ProfessionalFeed = () => {
       beforeImage: "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=400&h=500&fit=crop&crop=face",
       afterImage: "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=400&h=500&fit=crop&crop=face",
       category: "Harmonização Facial",
-      likes: 128,
-      comments: 24,
       timestamp: "2h atrás",
       results: "Autoestima renovada"
     },
@@ -36,8 +34,6 @@ const ProfessionalFeed = () => {
       beforeImage: "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=400&h=500&fit=crop&crop=face",
       afterImage: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=400&h=500&fit=crop&crop=face",
       category: "Skincare",
-      likes: 89,
-      comments: 15,
       timestamp: "5h atrás",
       results: "Pele renovada"
     }
@@ -65,8 +61,6 @@ const ProfessionalFeed = () => {
         afterImage: newPost.afterImage,
         category: newPost.category || "Transformação",
         results: newPost.results,
-        likes: 0,
-        comments: 0,
         timestamp: "agora"
       };
       setPosts([post, ...posts]);
@@ -207,7 +201,7 @@ const ProfessionalFeed = () => {
                   </div>
                 </CardHeader>
                 
-                <CardContent className="space-y-4 px-4 sm:px-6">
+                <CardContent className="space-y-4 px-4 sm:px-6 pb-6">
                   <div>
                     <h4 className="text-white font-bold text-lg sm:text-xl mb-2 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
                       {post.title}
@@ -242,22 +236,6 @@ const ProfessionalFeed = () => {
                         />
                       </div>
                     </div>
-                  </div>
-
-                  {/* Interaction Buttons - Mobile Optimized */}
-                  <div className="flex items-center justify-between pt-3 border-t border-purple-500/20">
-                    <Button variant="ghost" size="sm" className="text-pink-400 hover:text-pink-300 hover:bg-pink-500/10 font-semibold text-xs sm:text-sm flex-1 mx-1">
-                      <Heart className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                      {post.likes}
-                    </Button>
-                    <Button variant="ghost" size="sm" className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 font-semibold text-xs sm:text-sm flex-1 mx-1">
-                      <MessageCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                      {post.comments}
-                    </Button>
-                    <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-300 hover:bg-gray-500/10 font-semibold text-xs sm:text-sm flex-1 mx-1">
-                      <Share2 className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                      Compartilhar
-                    </Button>
                   </div>
                 </CardContent>
               </Card>
