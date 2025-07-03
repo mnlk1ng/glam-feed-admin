@@ -11,53 +11,54 @@ import AdminPanel from "@/components/AdminPanel";
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [appSettings, setAppSettings] = useState({
-    heroImage: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200&h=800&fit=crop&crop=face",
+    heroImage: "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=1200&h=800&fit=crop&crop=face",
     title: "PRISCILA ZILLO",
-    subtitle: "Ganhe dinheiro com suas habilidades digitais. Transforme seu conhecimento em renda.",
-    badge: "EXPERT DIGITAL",
+    subtitle: "Transforme sua beleza e autoestima com tratamentos estéticos personalizados. Realce sua beleza natural com técnicas avançadas e cuidado especializado.",
+    badge: "EXPERT EM ESTÉTICA",
     primaryButtonText: "✨ Agendar Consulta",
     secondaryButtonText: "🔥 Ver Transformações",
     primaryButtonColor: "bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
   });
 
-  const myLinks = [
+  // Serviços editáveis via admin
+  const [myLinks] = useState([
     {
       id: 1,
-      title: "CONSULTORIA PREMIUM",
-      image: "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=800&h=600&fit=crop",
-      description: "Sessão 1:1 personalizada para acelerar seus resultados",
-      url: "https://calendly.com/exemplo",
-      category: "Consultoria",
-      price: "R$ 497"
+      title: "HARMONIZAÇÃO FACIAL",
+      image: "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=800&h=600&fit=crop&crop=face",
+      description: "Realce sua beleza natural com preenchimentos e contornos faciais",
+      url: "https://calendly.com/harmonizacao",
+      category: "Facial",
+      price: "R$ 800"
     },
     {
       id: 2,
-      title: "MENTORIA VIP",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
-      description: "Programa completo de 3 meses para transformar sua carreira",
-      url: "https://mentoria.example.com",
-      category: "Mentoria",
-      price: "R$ 1.497"
+      title: "LIMPEZA DE PELE PROFUNDA",
+      image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=800&h=600&fit=crop&crop=face",
+      description: "Tratamento completo para renovação e purificação da pele",
+      url: "https://agendamento.com/limpeza",
+      category: "Skincare",
+      price: "R$ 150"
     },
     {
       id: 3,
-      title: "CURSO DIGITAL MASTERY",
-      image: "https://images.unsplash.com/photo-1553028826-f4804a6dba3b?w=800&h=600&fit=crop",
-      description: "Aprenda do zero ao profissional em marketing digital",
-      url: "https://curso.example.com",
-      category: "Curso",
-      price: "R$ 297"
+      title: "MASSAGEM RELAXANTE",
+      image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&h=600&fit=crop",
+      description: "Momento de relaxamento e bem-estar para corpo e mente",
+      url: "https://booking.com/massagem",
+      category: "Bem-estar",
+      price: "R$ 200"
     },
     {
       id: 4,
-      title: "COMUNIDADE EXCLUSIVA",
-      image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop",
-      description: "Acesso vitalício à nossa comunidade de experts",
-      url: "https://comunidade.example.com",
-      category: "Comunidade",
-      price: "R$ 97/mês"
+      title: "CONSULTORIA PERSONALIZADA",
+      image: "https://images.unsplash.com/photo-1552693673-1bf958298935?w=800&h=600&fit=crop",
+      description: "Análise completa e plano de cuidados personalizado",
+      url: "https://consultoria.example.com",
+      category: "Consultoria",
+      price: "R$ 350"
     }
-  ];
+  ]);
 
   const handleLinkClick = (url: string) => {
     window.open(url, '_blank', 'noopener,noreferrer');
@@ -90,15 +91,15 @@ const Index = () => {
               onSecondaryClick={handleSecondaryButtonClick}
             />
             
-            {/* Meus Links */}
+            {/* Meus Serviços */}
             <section id="meus-links" className="px-6 md:px-12 bg-gradient-to-br from-gray-900 via-purple-900/10 to-pink-900/10">
               <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-12">
                   <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
-                    Meus Serviços
+                    Meus Tratamentos
                   </h2>
                   <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-                    Escolha o melhor caminho para transformar sua vida digital
+                    Descubra os tratamentos que vão realçar sua beleza natural
                   </p>
                 </div>
                 
@@ -154,10 +155,10 @@ const Index = () => {
             <section className="px-6 md:px-12 py-16 bg-gradient-to-r from-purple-900/50 to-pink-900/50">
               <div className="max-w-4xl mx-auto text-center">
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-                  Pronta para sua <span className="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">Transformação Digital?</span>
+                  Pronta para sua <span className="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">Transformação?</span>
                 </h2>
                 <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
-                  Junte-se a centenas de mulheres que já transformaram suas vidas através do mundo digital
+                  Agende sua consulta e descubra como podemos realçar sua beleza natural
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white px-8 py-4 text-lg font-bold shadow-2xl transform hover:scale-105 transition-all duration-300">
@@ -170,7 +171,7 @@ const Index = () => {
                     onClick={() => setActiveSection("feed")}
                   >
                     <Sparkles className="mr-2 h-5 w-5" />
-                    Ver Resultados Reais
+                    Ver Transformações Reais
                   </Button>
                 </div>
               </div>
