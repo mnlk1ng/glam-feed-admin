@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,7 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
 import { Label } from "@/components/ui/label";
-import { Lock } from "lucide-react";
+import { Lock, Loader2 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 interface AppSettings {
   heroImage: string;
@@ -27,8 +27,10 @@ interface AdminPanelProps {
 }
 
 const AdminPanel = ({ appSettings, setAppSettings }: AdminPanelProps) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { user, loading, signIn, signOut } = useAuth();
   const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const [isSigningIn, setIsSigningIn] = useState(false);
+
   const [services, setServices] = useState([
     { id: 1, title: "CONSULTORIA PREMIUM", category: "Consultoria", status: "Ativo", price: "R$ 497", description: "Sessão 1:1 personalizada para acelerar seus resultados", url: "https://calendly.com/exemplo", image: "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=800&h=600&fit=crop" },
     { id: 2, title: "MENTORIA VIP", category: "Mentoria", status: "Ativo", price: "R$ 1.497", description: "Programa completo de 3 meses para transformar sua carreira", url: "https://mentoria.example.com", image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop" },
@@ -47,43 +49,6 @@ const AdminPanel = ({ appSettings, setAppSettings }: AdminPanelProps) => {
 
   const [tempSettings, setTempSettings] = useState(appSettings);
 
-  // Verificar se já está autenticado no localStorage
-  useEffect(() => {
-    const authStatus = localStorage.getItem('admin_authenticated');
-    if (authStatus === 'true') {
-      setIsAuthenticated(true);
-    }
-  }, []);
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Simular autenticação (em produção, usar Supabase Auth)
-    if (loginData.email === "admin@estetica.com" && loginData.password === "admin123") {
-      setIsAuthenticated(true);
-      localStorage.setItem('admin_authenticated', 'true');
-      toast({
-        title: "Login realizado com sucesso!",
-        description: "Bem-vinda ao painel administrativo.",
-      });
-    } else {
-      toast({
-        title: "Erro de autenticação",
-        description: "Email ou senha incorretos.",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem('admin_authenticated');
-    setLoginData({ email: "", password: "" });
-    toast({
-      title: "Logout realizado",
-      description: "Você foi desconectada do painel.",
-    });
-  };
-
   const colorOptions = [
     { name: "Rosa/Roxo", value: "bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700" },
     { name: "Azul", value: "bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700" },
@@ -91,6 +56,47 @@ const AdminPanel = ({ appSettings, setAppSettings }: AdminPanelProps) => {
     { name: "Laranja", value: "bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700" },
     { name: "Dourado", value: "bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700" }
   ];
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSigningIn(true);
+    
+    const { error } = await signIn(loginData.email, loginData.password);
+    
+    if (error) {
+      toast({
+        title: "Erro de autenticação",
+        description: error.message || "Email ou senha incorretos.",
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        title: "Login realizado com sucesso! ✨",
+        description: "Bem-vinda ao painel administrativo.",
+      });
+      setLoginData({ email: "", password: "" });
+    }
+    
+    setIsSigningIn(false);
+  };
+
+  const handleLogout = async () => {
+    const { error } = await signOut();
+    
+    if (error) {
+      toast({
+        title: "Erro ao sair",
+        description: error.message || "Ocorreu um erro ao fazer logout.",
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        title: "Logout realizado",
+        description: "Você foi desconectada do painel.",
+      });
+      setLoginData({ email: "", password: "" });
+    }
+  };
 
   const handleSaveSettings = () => {
     setAppSettings(tempSettings);
@@ -130,8 +136,20 @@ const AdminPanel = ({ appSettings, setAppSettings }: AdminPanelProps) => {
     ));
   };
 
+  // Show loading while checking auth
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/10 to-pink-900/10 flex items-center justify-center p-4">
+        <div className="flex items-center gap-3 text-white">
+          <Loader2 className="h-6 w-6 animate-spin" />
+          <span>Verificando autenticação...</span>
+        </div>
+      </div>
+    );
+  }
+
   // Se não estiver autenticado, mostrar tela de login
-  if (!isAuthenticated) {
+  if (!user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/10 to-pink-900/10 flex items-center justify-center p-4">
         <Card className="w-full max-w-md bg-gray-900/80 border-purple-500/20 backdrop-blur-xl shadow-2xl">
@@ -152,11 +170,12 @@ const AdminPanel = ({ appSettings, setAppSettings }: AdminPanelProps) => {
                 <Label className="text-white font-semibold">Email</Label>
                 <Input
                   type="email"
-                  placeholder="admin@estetica.com"
+                  placeholder="seu@email.com"
                   value={loginData.email}
                   onChange={(e) => setLoginData({...loginData, email: e.target.value})}
                   className="bg-gray-800/80 border-purple-500/30 text-white placeholder-gray-400"
                   required
+                  disabled={isSigningIn}
                 />
               </div>
               
@@ -169,18 +188,32 @@ const AdminPanel = ({ appSettings, setAppSettings }: AdminPanelProps) => {
                   onChange={(e) => setLoginData({...loginData, password: e.target.value})}
                   className="bg-gray-800/80 border-purple-500/30 text-white placeholder-gray-400"
                   required
+                  disabled={isSigningIn}
                 />
               </div>
 
-              <Button type="submit" className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 w-full font-bold py-3 shadow-xl">
-                <Lock className="mr-2 h-4 w-4" />
-                Entrar no Painel
+              <Button 
+                type="submit" 
+                className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 w-full font-bold py-3 shadow-xl"
+                disabled={isSigningIn}
+              >
+                {isSigningIn ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Entrando...
+                  </>
+                ) : (
+                  <>
+                    <Lock className="mr-2 h-4 w-4" />
+                    Entrar no Painel
+                  </>
+                )}
               </Button>
             </form>
             
             <div className="mt-6 p-4 bg-gray-800/50 rounded-lg border border-purple-500/20">
               <p className="text-xs text-gray-400 text-center">
-                <strong>Demo:</strong> admin@estetica.com / admin123
+                <strong>Autenticação Supabase:</strong> Use suas credenciais reais
               </p>
             </div>
           </CardContent>
@@ -193,9 +226,12 @@ const AdminPanel = ({ appSettings, setAppSettings }: AdminPanelProps) => {
     <div className="min-h-screen p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-white bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
-            Painel Administrativo
-          </h1>
+          <div>
+            <h1 className="text-3xl font-bold text-white bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+              Painel Administrativo
+            </h1>
+            <p className="text-gray-400 text-sm mt-1">Bem-vinda, {user.email}</p>
+          </div>
           <Button onClick={handleLogout} variant="outline" className="border-red-500 text-red-400 hover:bg-red-500 hover:text-white">
             Sair
           </Button>
