@@ -20,6 +20,33 @@ const Index = () => {
     primaryButtonColor: "bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
   });
 
+  const [posts, setPosts] = useState([
+    {
+      id: 1,
+      author: "Priscila Zillo",
+      avatar: "https://images.unsplash.com/photo-1559599101-f09722fb4948?w=150&h=150&fit=crop&crop=face",
+      title: "Harmonização Facial Completa",
+      description: "Transformação incrível com preenchimento labial e contorno facial. A cliente ganhou autoestima e confiança para conquistar seus sonhos! ✨",
+      beforeImage: "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=400&h=500&fit=crop&crop=face",
+      afterImage: "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=400&h=500&fit=crop&crop=face",
+      category: "Harmonização Facial",
+      timestamp: "2h atrás",
+      results: "Autoestima renovada"
+    },
+    {
+      id: 2,
+      author: "Priscila Zillo",
+      avatar: "https://images.unsplash.com/photo-1559599101-f09722fb4948?w=150&h=150&fit=crop&crop=face",
+      title: "Limpeza de Pele Profunda",
+      description: "Resultado surpreendente! Pele completamente renovada e radiante. Tratamento personalizado que transformou a textura e luminosidade da pele.",
+      beforeImage: "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=400&h=500&fit=crop&crop=face",
+      afterImage: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=400&h=500&fit=crop&crop=face",
+      category: "Skincare",
+      timestamp: "5h atrás",
+      results: "Pele renovada"
+    }
+  ]);
+
   // Serviços editáveis via admin
   const [myLinks] = useState([
     {
@@ -79,9 +106,9 @@ const Index = () => {
   const renderContent = () => {
     switch (activeSection) {
       case "feed":
-        return <ProfessionalFeed />;
+        return <ProfessionalFeed posts={posts} />;
       case "admin":
-        return <AdminPanel appSettings={appSettings} setAppSettings={setAppSettings} />;
+        return <AdminPanel appSettings={appSettings} setAppSettings={setAppSettings} posts={posts} setPosts={setPosts} />;
       default:
         return (
           <div className="space-y-12">

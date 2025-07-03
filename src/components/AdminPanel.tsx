@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
 import { Label } from "@/components/ui/label";
-import { Lock, Loader2 } from "lucide-react";
+import { Lock, Loader2, Edit, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 interface AppSettings {
@@ -21,21 +22,36 @@ interface AppSettings {
   primaryButtonColor: string;
 }
 
+interface Post {
+  id: number;
+  author: string;
+  avatar: string;
+  title: string;
+  description: string;
+  beforeImage: string;
+  afterImage: string;
+  category: string;
+  timestamp: string;
+  results: string;
+}
+
 interface AdminPanelProps {
   appSettings: AppSettings;
   setAppSettings: (settings: AppSettings) => void;
+  posts: Post[];
+  setPosts: (posts: Post[]) => void;
 }
 
-const AdminPanel = ({ appSettings, setAppSettings }: AdminPanelProps) => {
+const AdminPanel = ({ appSettings, setAppSettings, posts, setPosts }: AdminPanelProps) => {
   const { user, loading, signIn, signOut } = useAuth();
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [isSigningIn, setIsSigningIn] = useState(false);
 
   const [services, setServices] = useState([
-    { id: 1, title: "CONSULTORIA PREMIUM", category: "Consultoria", status: "Ativo", price: "R$ 497", description: "Sessão 1:1 personalizada para acelerar seus resultados", url: "https://calendly.com/exemplo", image: "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=800&h=600&fit=crop" },
-    { id: 2, title: "MENTORIA VIP", category: "Mentoria", status: "Ativo", price: "R$ 1.497", description: "Programa completo de 3 meses para transformar sua carreira", url: "https://mentoria.example.com", image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop" },
-    { id: 3, title: "CURSO DIGITAL MASTERY", category: "Curso", status: "Ativo", price: "R$ 297", description: "Aprenda do zero ao profissional em marketing digital", url: "https://curso.example.com", image: "https://images.unsplash.com/photo-1553028826-f4804a6dba3b?w=800&h=600&fit=crop" },
-    { id: 4, title: "COMUNIDADE EXCLUSIVA", category: "Comunidade", status: "Ativo", price: "R$ 97/mês", description: "Acesso vitalício à nossa comunidade de experts", url: "https://comunidade.example.com", image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop" }
+    { id: 1, title: "HARMONIZAÇÃO FACIAL", category: "Facial", status: "Ativo", price: "R$ 800", description: "Realce sua beleza natural com preenchimentos e contornos faciais", url: "https://calendly.com/harmonizacao", image: "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=800&h=600&fit=crop&crop=face" },
+    { id: 2, title: "LIMPEZA DE PELE PROFUNDA", category: "Skincare", status: "Ativo", price: "R$ 150", description: "Tratamento completo para renovação e purificação da pele", url: "https://agendamento.com/limpeza", image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=800&h=600&fit=crop&crop=face" },
+    { id: 3, title: "MASSAGEM RELAXANTE", category: "Bem-estar", status: "Ativo", price: "R$ 200", description: "Momento de relaxamento e bem-estar para corpo e mente", url: "https://booking.com/massagem", image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&h=600&fit=crop" },
+    { id: 4, title: "CONSULTORIA PERSONALIZADA", category: "Consultoria", status: "Ativo", price: "R$ 350", description: "Análise completa e plano de cuidados personalizado", url: "https://consultoria.example.com", image: "https://images.unsplash.com/photo-1552693673-1bf958298935?w=800&h=600&fit=crop" }
   ]);
 
   const [newService, setNewService] = useState({
@@ -47,6 +63,16 @@ const AdminPanel = ({ appSettings, setAppSettings }: AdminPanelProps) => {
     image: ""
   });
 
+  const [newPost, setNewPost] = useState({
+    title: "",
+    description: "",
+    category: "",
+    results: "",
+    beforeImage: "",
+    afterImage: ""
+  });
+
+  const [editingPost, setEditingPost] = useState<Post | null>(null);
   const [tempSettings, setTempSettings] = useState(appSettings);
 
   const colorOptions = [
@@ -113,7 +139,7 @@ const AdminPanel = ({ appSettings, setAppSettings }: AdminPanelProps) => {
         id: services.length + 1,
         title: newService.title,
         category: newService.category,
-        status: "Ativo",
+        status: "Ativo" as const,
         price: newService.price,
         description: newService.description,
         url: newService.url,
@@ -128,10 +154,72 @@ const AdminPanel = ({ appSettings, setAppSettings }: AdminPanelProps) => {
     }
   };
 
+  const handleAddPost = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newPost.title && newPost.description && newPost.beforeImage && newPost.afterImage) {
+      const post: Post = {
+        id: posts.length + 1,
+        author: "Priscila Zillo",
+        avatar: "https://images.unsplash.com/photo-1559599101-f09722fb4948?w=150&h=150&fit=crop&crop=face",
+        title: newPost.title,
+        description: newPost.description,
+        beforeImage: newPost.beforeImage,
+        afterImage: newPost.afterImage,
+        category: newPost.category || "Transformação",
+        results: newPost.results,
+        timestamp: "agora"
+      };
+      setPosts([post, ...posts]);
+      setNewPost({ title: "", description: "", category: "", results: "", beforeImage: "", afterImage: "" });
+      toast({
+        title: "Transformação adicionada! ✨",
+        description: "Nova transformação foi publicada no feed.",
+      });
+    }
+  };
+
+  const handleEditPost = (post: Post) => {
+    setEditingPost(post);
+    setNewPost({
+      title: post.title,
+      description: post.description,
+      category: post.category,
+      results: post.results,
+      beforeImage: post.beforeImage,
+      afterImage: post.afterImage
+    });
+  };
+
+  const handleUpdatePost = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingPost && newPost.title && newPost.description && newPost.beforeImage && newPost.afterImage) {
+      const updatedPosts = posts.map(post => 
+        post.id === editingPost.id 
+          ? { ...post, ...newPost }
+          : post
+      );
+      setPosts(updatedPosts);
+      setEditingPost(null);
+      setNewPost({ title: "", description: "", category: "", results: "", beforeImage: "", afterImage: "" });
+      toast({
+        title: "Transformação atualizada! ✨",
+        description: "As alterações foram salvas com sucesso.",
+      });
+    }
+  };
+
+  const handleDeletePost = (id: number) => {
+    setPosts(posts.filter(post => post.id !== id));
+    toast({
+      title: "Transformação removida",
+      description: "A transformação foi excluída do feed.",
+    });
+  };
+
   const toggleServiceStatus = (id: number) => {
     setServices(services.map(service => 
       service.id === id 
-        ? { ...service, status: service.status === "Ativo" ? "Pausado" : "Ativo" }
+        ? { ...service, status: service.status === "Ativo" ? "Pausado" as const : "Ativo" as const }
         : service
     ));
   };
@@ -210,12 +298,6 @@ const AdminPanel = ({ appSettings, setAppSettings }: AdminPanelProps) => {
                 )}
               </Button>
             </form>
-            
-            <div className="mt-6 p-4 bg-gray-800/50 rounded-lg border border-purple-500/20">
-              <p className="text-xs text-gray-400 text-center">
-                <strong>Autenticação Supabase:</strong> Use suas credenciais reais
-              </p>
-            </div>
           </CardContent>
         </Card>
       </div>
@@ -223,7 +305,7 @@ const AdminPanel = ({ appSettings, setAppSettings }: AdminPanelProps) => {
   }
 
   return (
-    <div className="min-h-screen p-4 md:p-8">
+    <div className="min-h-screen p-4 md:p-8 bg-gradient-to-br from-gray-900 via-purple-900/10 to-pink-900/10">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div>
@@ -244,6 +326,9 @@ const AdminPanel = ({ appSettings, setAppSettings }: AdminPanelProps) => {
             </TabsTrigger>
             <TabsTrigger value="services" className="text-white data-[state=active]:bg-pink-500">
               Serviços
+            </TabsTrigger>
+            <TabsTrigger value="feed" className="text-white data-[state=active]:bg-pink-500">
+              Feed
             </TabsTrigger>
             <TabsTrigger value="analytics" className="text-white data-[state=active]:bg-pink-500">
               Analytics
@@ -439,6 +524,134 @@ const AdminPanel = ({ appSettings, setAppSettings }: AdminPanelProps) => {
             </div>
           </TabsContent>
 
+          {/* Feed Management */}
+          <TabsContent value="feed" className="space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <h2 className="text-2xl font-bold text-white">Gerenciar Feed de Transformações</h2>
+              
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="bg-pink-500 hover:bg-pink-600 font-bold">
+                    + Nova Transformação
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="bg-gray-900 border-gray-700 max-w-2xl">
+                  <DialogHeader>
+                    <DialogTitle className="text-white">
+                      {editingPost ? "Editar Transformação" : "Adicionar Nova Transformação"}
+                    </DialogTitle>
+                  </DialogHeader>
+                  <form onSubmit={editingPost ? handleUpdatePost : handleAddPost} className="space-y-4">
+                    <Input
+                      placeholder="Título da transformação..."
+                      value={newPost.title}
+                      onChange={(e) => setNewPost({...newPost, title: e.target.value})}
+                      className="bg-gray-800 border-gray-600 text-white"
+                    />
+                    <Textarea
+                      placeholder="Descrição da transformação..."
+                      value={newPost.description}
+                      onChange={(e) => setNewPost({...newPost, description: e.target.value})}
+                      className="bg-gray-800 border-gray-600 text-white min-h-20"
+                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <Input
+                        placeholder="Categoria..."
+                        value={newPost.category}
+                        onChange={(e) => setNewPost({...newPost, category: e.target.value})}
+                        className="bg-gray-800 border-gray-600 text-white"
+                      />
+                      <Input
+                        placeholder="Resultado..."
+                        value={newPost.results}
+                        onChange={(e) => setNewPost({...newPost, results: e.target.value})}
+                        className="bg-gray-800 border-gray-600 text-white"
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <Input
+                        placeholder="URL da foto ANTES..."
+                        value={newPost.beforeImage}
+                        onChange={(e) => setNewPost({...newPost, beforeImage: e.target.value})}
+                        className="bg-gray-800 border-gray-600 text-white"
+                      />
+                      <Input
+                        placeholder="URL da foto DEPOIS..."
+                        value={newPost.afterImage}
+                        onChange={(e) => setNewPost({...newPost, afterImage: e.target.value})}
+                        className="bg-gray-800 border-gray-600 text-white"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button type="submit" className="bg-pink-500 hover:bg-pink-600 flex-1 font-bold">
+                        {editingPost ? "Atualizar" : "Criar"} Transformação
+                      </Button>
+                      {editingPost && (
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          onClick={() => {
+                            setEditingPost(null);
+                            setNewPost({ title: "", description: "", category: "", results: "", beforeImage: "", afterImage: "" });
+                          }}
+                          className="border-gray-600 text-gray-300"
+                        >
+                          Cancelar
+                        </Button>
+                      )}
+                    </div>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </div>
+
+            <div className="grid gap-4">
+              {posts.map((post) => (
+                <Card key={post.id} className="bg-gray-900/50 border-gray-700">
+                  <CardContent className="p-6">
+                    <div className="flex flex-col gap-4">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <h3 className="text-white font-bold text-lg">{post.title}</h3>
+                          <p className="text-gray-400 text-sm">{post.category} • {post.results}</p>
+                          <p className="text-gray-300 mt-2">{post.description}</p>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEditPost(post)}
+                            className="border-gray-600 text-gray-300"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleDeletePost(post.id)}
+                            className="border-red-600 text-red-400 hover:bg-red-600"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-xs text-gray-400 mb-2">ANTES</p>
+                          <img src={post.beforeImage} alt="Antes" className="w-full h-32 object-cover rounded border-2 border-red-500/30" />
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-400 mb-2">DEPOIS</p>
+                          <img src={post.afterImage} alt="Depois" className="w-full h-32 object-cover rounded border-2 border-green-500/30" />
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
           {/* Analytics */}
           <TabsContent value="analytics" className="space-y-6">
             <h2 className="text-2xl font-bold text-white">Analytics</h2>
@@ -455,10 +668,10 @@ const AdminPanel = ({ appSettings, setAppSettings }: AdminPanelProps) => {
               
               <Card className="bg-gray-900/50 border-gray-700">
                 <CardHeader>
-                  <CardTitle className="text-white text-sm">Serviços Ativos</CardTitle>
+                  <CardTitle className="text-white text-sm">Transformações</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-3xl font-bold text-green-400">{services.filter(s => s.status === "Ativo").length}</p>
+                  <p className="text-3xl font-bold text-purple-400">{posts.length}</p>
                 </CardContent>
               </Card>
               
@@ -476,7 +689,7 @@ const AdminPanel = ({ appSettings, setAppSettings }: AdminPanelProps) => {
                   <CardTitle className="text-white text-sm">Taxa de Conversão</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-3xl font-bold text-purple-400">24%</p>
+                  <p className="text-3xl font-bold text-green-400">24%</p>
                 </CardContent>
               </Card>
             </div>
