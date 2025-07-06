@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -80,7 +79,17 @@ const AdminPanel = ({ appSettings, setAppSettings, posts, setPosts }: AdminPanel
     { name: "Azul", value: "bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700" },
     { name: "Verde", value: "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700" },
     { name: "Laranja", value: "bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700" },
-    { name: "Dourado", value: "bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700" }
+    { name: "Dourado", value: "bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700" },
+    { name: "Violeta", value: "bg-gradient-to-r from-violet-500 to-indigo-600 hover:from-violet-600 hover:to-indigo-700" },
+    { name: "Turquesa", value: "bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600" },
+    { name: "Coral", value: "bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600" },
+    { name: "Esmeralda", value: "bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600" },
+    { name: "Sunset", value: "bg-gradient-to-r from-amber-500 to-red-500 hover:from-amber-600 hover:to-red-600" },
+    { name: "Oceano", value: "bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700" },
+    { name: "Lavanda", value: "bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500" },
+    { name: "Mint", value: "bg-gradient-to-r from-green-400 to-cyan-400 hover:from-green-500 hover:to-cyan-500" },
+    { name: "Flamingo", value: "bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500" },
+    { name: "Royal", value: "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700" }
   ];
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -404,20 +413,27 @@ const AdminPanel = ({ appSettings, setAppSettings, posts, setPosts }: AdminPanel
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label className="text-white">Estilo do Botão Principal</Label>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                <div className="space-y-3">
+                  <Label className="text-white text-lg font-semibold">Estilo do Botão Principal</Label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                     {colorOptions.map((color) => (
                       <Button
                         key={color.name}
                         variant={tempSettings.primaryButtonColor === color.value ? "default" : "outline"}
-                        className={`${color.value} text-white border-gray-600 text-xs`}
+                        className={`${color.value} text-white border-2 ${
+                          tempSettings.primaryButtonColor === color.value 
+                            ? 'border-white shadow-lg scale-105' 
+                            : 'border-gray-600 hover:border-white/50'
+                        } text-sm font-semibold py-3 transition-all duration-200`}
                         onClick={() => setTempSettings({...tempSettings, primaryButtonColor: color.value})}
                       >
                         {color.name}
                       </Button>
                     ))}
                   </div>
+                  <p className="text-gray-400 text-sm">
+                    Escolha uma das {colorOptions.length} opções de cores disponíveis para personalizar o botão principal.
+                  </p>
                 </div>
 
                 <Button onClick={handleSaveSettings} className="bg-green-500 hover:bg-green-600 w-full font-bold py-3">
