@@ -1,109 +1,123 @@
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import React from 'react';
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-interface Post {
-  id: number;
-  author: string;
-  avatar: string;
-  title: string;
-  description: string;
-  beforeImage: string;
-  afterImage: string;
-  category: string;
-  timestamp: string;
-  results: string;
-}
+import { Clock, Award } from "lucide-react";
+import { Post } from '@/hooks/useSupabaseData';
 
 interface ProfessionalFeedProps {
   posts: Post[];
 }
 
-const ProfessionalFeed = ({ posts }: ProfessionalFeedProps) => {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/10 to-pink-900/10">
-      <div className="px-4 sm:px-6 lg:px-12 py-6">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
-              Transformações Reais
-            </h1>
-            <p className="text-gray-300 text-base sm:text-lg max-w-2xl mx-auto">
-              Inspire-se com resultados incríveis dos nossos tratamentos estéticos
-            </p>
-          </div>
+const ProfessionalFeed: React.FC<ProfessionalFeedProps> = ({ posts }) => {
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 1) return '1 dia atrás';
+    if (diffDays < 7) return `${diffDays} dias atrás`;
+    if (diffDays < 30) return `${Math.ceil(diffDays / 7)} semanas atrás`;
+    return `${Math.ceil(diffDays / 30)} meses atrás`;
+  };
 
-          {/* Posts Feed */}
-          <div className="space-y-6">
-            {posts.map((post) => (
-              <Card key={post.id} className="bg-gray-900/80 border-purple-500/20 backdrop-blur-xl shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 overflow-hidden">
-                <CardHeader className="pb-3 px-4 sm:px-6">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="w-12 h-12 sm:w-14 sm:h-14 ring-2 ring-pink-500/30">
-                      <AvatarImage src={post.avatar} />
-                      <AvatarFallback className="bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold text-sm">
-                        {post.author[0]}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-white font-bold text-sm sm:text-base truncate">{post.author}</h3>
-                      <p className="text-gray-400 text-xs sm:text-sm">{post.timestamp}</p>
-                    </div>
-                    <div className="flex flex-col sm:flex-row gap-1 sm:gap-2">
-                      <Badge className="bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold text-xs px-2 py-1">
-                        {post.category}
-                      </Badge>
-                      {post.results && (
-                        <Badge className="bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold text-xs px-2 py-1">
-                          {post.results}
-                        </Badge>
-                      )}
+  if (posts.length === 0) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">Nenhum post encontrado</h2>
+          <p className="text-gray-400">Os posts aparecerão aqui quando forem criados no painel administrativo.</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-black text-white">
+      <div className="max-w-4xl mx-auto px-6 py-12">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+            Transformações Reais
+          </h1>
+          <p className="text-gray-400 text-lg">
+            Veja os resultados incríveis dos nossos tratamentos estéticos
+          </p>
+        </div>
+
+        <div className="space-y-8">
+          {posts.map((post) => (
+            <Card key={post.id} className="bg-gray-900/60 border-purple-500/20 backdrop-blur-xl overflow-hidden">
+              <CardContent className="p-6">
+                {/* Header do Post */}
+                <div className="flex items-center space-x-4 mb-6">
+                  <img
+                    src={post.avatar_url}
+                    alt={post.author}
+                    className="w-12 h-12 rounded-full object-cover border-2 border-purple-500/50"
+                  />
+                  <div className="flex-1">
+                    <h3 className="text-white font-semibold">{post.author}</h3>
+                    <div className="flex items-center space-x-2 text-gray-400 text-sm">
+                      <Clock className="h-4 w-4" />
+                      <span>{formatDate(post.created_at)}</span>
                     </div>
                   </div>
-                </CardHeader>
-                
-                <CardContent className="space-y-4 px-4 sm:px-6 pb-6">
-                  <div>
-                    <h4 className="text-white font-bold text-lg sm:text-xl mb-2 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
-                      {post.title}
-                    </h4>
-                    <p className="text-gray-300 leading-relaxed text-sm sm:text-base">{post.description}</p>
-                  </div>
+                  <Badge className="bg-gradient-to-r from-pink-500 to-purple-600 text-white">
+                    {post.category}
+                  </Badge>
+                </div>
+
+                {/* Título do Post */}
+                <h2 className="text-2xl font-bold text-white mb-4">{post.title}</h2>
+
+                {/* Imagens Antes/Depois */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  {post.before_image_url && (
+                    <div className="relative group">
+                      <img
+                        src={post.before_image_url}
+                        alt="Antes"
+                        className="w-full h-64 object-cover rounded-lg"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg" />
+                      <div className="absolute bottom-4 left-4">
+                        <Badge className="bg-red-600 text-white">ANTES</Badge>
+                      </div>
+                    </div>
+                  )}
                   
-                  {/* Before and After Images */}
-                  <div className="space-y-4">
+                  {post.after_image_url && (
                     <div className="relative group">
-                      <div className="absolute -top-2 left-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold z-10 shadow-lg">
-                        ANTES
-                      </div>
-                      <div className="rounded-xl overflow-hidden border-2 border-red-500/30 shadow-xl group-hover:scale-[1.02] transition-transform duration-300">
-                        <img 
-                          src={post.beforeImage} 
-                          alt="Antes do tratamento"
-                          className="w-full h-48 sm:h-64 object-cover"
-                        />
+                      <img
+                        src={post.after_image_url}
+                        alt="Depois"
+                        className="w-full h-64 object-cover rounded-lg"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg" />
+                      <div className="absolute bottom-4 left-4">
+                        <Badge className="bg-green-600 text-white">DEPOIS</Badge>
                       </div>
                     </div>
-                    
-                    <div className="relative group">
-                      <div className="absolute -top-2 left-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold z-10 shadow-lg">
-                        DEPOIS
-                      </div>
-                      <div className="rounded-xl overflow-hidden border-2 border-green-500/30 shadow-xl group-hover:scale-[1.02] transition-transform duration-300">
-                        <img 
-                          src={post.afterImage} 
-                          alt="Depois do tratamento"
-                          className="w-full h-48 sm:h-64 object-cover"
-                        />
-                      </div>
-                    </div>
+                  )}
+                </div>
+
+                {/* Descrição */}
+                <p className="text-gray-300 text-lg leading-relaxed mb-6">
+                  {post.description}
+                </p>
+
+                {/* Resultado */}
+                {post.results && (
+                  <div className="flex items-center space-x-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-lg p-4 border border-green-500/30">
+                    <Award className="h-5 w-5 text-green-400" />
+                    <span className="text-green-400 font-semibold">Resultado:</span>
+                    <span className="text-white">{post.results}</span>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                )}
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
     </div>

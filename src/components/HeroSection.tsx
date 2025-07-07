@@ -1,82 +1,91 @@
 
+import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Calendar, Sparkles } from "lucide-react";
 
 interface HeroSectionProps {
-  heroImage?: string;
-  title?: string;
-  subtitle?: string;
-  badge?: string;
-  primaryButtonText?: string;
-  secondaryButtonText?: string;
-  primaryButtonColor?: string;
-  onPrimaryClick?: () => void;
-  onSecondaryClick?: () => void;
+  heroImage: string;
+  title: string;
+  subtitle: string;
+  badge: string;
+  primaryButtonText: string;
+  secondaryButtonText: string;
+  primaryButtonColor: string;
+  onPrimaryClick: () => void;
+  onSecondaryClick: () => void;
 }
 
-const HeroSection = ({ 
-  heroImage = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200&h=800&fit=crop&crop=face",
-  title = "PRISCILA ZILLO",
-  subtitle = "Ganhe dinheiro com suas habilidades digitais. Transforme seu conhecimento em renda.",
-  badge = "EXPERT DIGITAL",
-  primaryButtonText = "✨ Agendar Consulta",
-  secondaryButtonText = "🔥 Ver Transformações",
-  primaryButtonColor = "bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700",
+const HeroSection: React.FC<HeroSectionProps> = ({
+  heroImage,
+  title,
+  subtitle,
+  badge,
+  primaryButtonText,
+  secondaryButtonText,
+  primaryButtonColor,
   onPrimaryClick,
   onSecondaryClick
-}: HeroSectionProps) => {
+}) => {
   return (
-    <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center px-6 md:px-12 overflow-hidden">
       {/* Background Image */}
-      <div className="absolute inset-0">
-        <img 
-          src={heroImage} 
-          alt="Expert Background"
-          className="w-full h-full object-cover object-center"
+      <div className="absolute inset-0 z-0">
+        <img
+          src={heroImage}
+          alt="Hero Background"
+          className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30" />
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-900/20 to-pink-900/20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/80" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/20 to-black/60" />
       </div>
 
       {/* Content */}
-      <div className="relative z-10 text-center px-4 max-w-4xl">
-        <Badge className="bg-gradient-to-r from-gold-400 to-yellow-300 text-black font-bold mb-6 text-sm px-4 py-2 shadow-2xl">
+      <div className="relative z-10 text-center max-w-4xl mx-auto">
+        {/* Badge */}
+        <Badge className="mb-6 px-6 py-2 text-sm font-bold bg-gradient-to-r from-pink-500 to-purple-600 text-white border-0 shadow-2xl">
           {badge}
         </Badge>
-        <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-2xl tracking-tight">
-          {title}
+
+        {/* Title */}
+        <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+          <span className="bg-gradient-to-r from-white via-pink-200 to-purple-200 bg-clip-text text-transparent">
+            {title}
+          </span>
         </h1>
-        <p className="text-xl md:text-2xl text-gray-200 mb-10 max-w-3xl mx-auto leading-relaxed font-light">
+
+        {/* Subtitle */}
+        <p className="text-xl md:text-2xl text-gray-300 mb-10 leading-relaxed max-w-3xl mx-auto font-light">
           {subtitle}
         </p>
-        
-        <div className="flex flex-col sm:flex-row gap-6 justify-center">
+
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button 
-            className={`${primaryButtonColor} text-white px-10 py-4 text-lg font-semibold shadow-2xl transform hover:scale-105 transition-all duration-300 border-2 border-white/20`}
+            size="lg"
+            className={`${primaryButtonColor} text-white px-8 py-4 text-lg font-bold shadow-2xl transform hover:scale-105 transition-all duration-300`}
             onClick={onPrimaryClick}
           >
+            <Calendar className="mr-2 h-5 w-5" />
             {primaryButtonText}
           </Button>
+          
           <Button 
+            size="lg"
             variant="outline" 
-            className="border-2 border-white/80 text-white hover:bg-white hover:text-black px-10 py-4 text-lg font-semibold backdrop-blur-sm bg-white/10 transform hover:scale-105 transition-all duration-300 shadow-2xl"
+            className="border-2 border-white/80 text-white hover:bg-white hover:text-black px-8 py-4 text-lg font-bold backdrop-blur-sm bg-white/10 transform hover:scale-105 transition-all duration-300 shadow-2xl"
             onClick={onSecondaryClick}
           >
+            <Sparkles className="mr-2 h-5 w-5" />
             {secondaryButtonText}
           </Button>
         </div>
       </div>
 
-      {/* Floating Luxury Elements */}
-      <div className="absolute top-20 left-10 text-gold-300 text-8xl animate-pulse opacity-30">
-        ✨
-      </div>
-      <div className="absolute bottom-32 right-10 text-pink-300 text-6xl animate-bounce opacity-40">
-        💎
-      </div>
-      <div className="absolute top-1/3 right-20 text-purple-300 text-4xl animate-pulse opacity-20">
-        ⭐
-      </div>
+      {/* Decorative Elements */}
+      <div className="absolute top-20 left-10 w-20 h-20 bg-pink-500/20 rounded-full blur-xl animate-pulse" />
+      <div className="absolute bottom-32 right-16 w-32 h-32 bg-purple-500/20 rounded-full blur-xl animate-pulse delay-1000" />
+      <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-blue-500/20 rounded-full blur-xl animate-pulse delay-500" />
     </section>
   );
 };
