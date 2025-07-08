@@ -5,7 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, Sparkles } from "lucide-react";
 
 interface HeroSectionProps {
-  heroImage: string;
+  heroImage?: string;
+  heroVideo?: string;
   title: string;
   subtitle: string;
   badge: string;
@@ -18,6 +19,7 @@ interface HeroSectionProps {
 
 const HeroSection: React.FC<HeroSectionProps> = ({
   heroImage,
+  heroVideo,
   title,
   subtitle,
   badge,
@@ -29,13 +31,35 @@ const HeroSection: React.FC<HeroSectionProps> = ({
 }) => {
   return (
     <section className="relative min-h-screen flex items-center justify-center px-6 md:px-12 overflow-hidden">
-      {/* Background Image */}
+      {/* Background Media */}
       <div className="absolute inset-0 z-0">
-        <img
-          src={heroImage}
-          alt="Hero Background"
-          className="w-full h-full object-cover"
-        />
+        {heroVideo ? (
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
+            poster={heroImage}
+          >
+            <source src={heroVideo} type="video/mp4" />
+            {heroImage && (
+              <img
+                src={heroImage}
+                alt="Hero Background"
+                className="w-full h-full object-cover"
+              />
+            )}
+          </video>
+        ) : heroImage ? (
+          <img
+            src={heroImage}
+            alt="Hero Background"
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-purple-900 to-pink-900" />
+        )}
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/80" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/20 to-black/60" />
       </div>

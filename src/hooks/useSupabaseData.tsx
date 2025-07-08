@@ -34,6 +34,8 @@ export interface Post {
 export interface AppSettings {
   id: string;
   hero_image_url: string;
+  hero_video_url: string;
+  login_logo_url: string;
   title: string;
   subtitle: string;
   badge: string;
@@ -86,12 +88,13 @@ export const useSupabaseData = () => {
 
   // Carregar dados do Supabase
   const loadData = async () => {
-    if (!user) return;
+    // Permitir carregar configurações mesmo sem usuário logado
+    const loadPublicData = !user;
 
     try {
       setLoading(true);
 
-      // Carregar serviços
+      // Carregar serviços (sempre)
       const { data: servicesData, error: servicesError } = await supabase
         .from('services')
         .select('*')
@@ -99,12 +102,12 @@ export const useSupabaseData = () => {
 
       if (servicesError) {
         console.error('Erro ao carregar serviços:', servicesError);
-        toast.error('Erro ao carregar serviços');
+        if (user) toast.error('Erro ao carregar serviços');
       } else {
         setServices(servicesData || []);
       }
 
-      // Carregar posts
+      // Carregar posts (sempre)
       const { data: postsData, error: postsError } = await supabase
         .from('posts')
         .select('*')
@@ -112,12 +115,12 @@ export const useSupabaseData = () => {
 
       if (postsError) {
         console.error('Erro ao carregar posts:', postsError);
-        toast.error('Erro ao carregar posts');
+        if (user) toast.error('Erro ao carregar posts');
       } else {
         setPosts(postsData || []);
       }
 
-      // Carregar configurações
+      // Carregar configurações (sempre)
       const { data: settingsData, error: settingsError } = await supabase
         .from('app_settings')
         .select('*')
@@ -126,13 +129,13 @@ export const useSupabaseData = () => {
 
       if (settingsError) {
         console.error('Erro ao carregar configurações:', settingsError);
-        toast.error('Erro ao carregar configurações');
+        if (user) toast.error('Erro ao carregar configurações');
       } else {
         setAppSettings(settingsData);
       }
     } catch (error) {
       console.error('Erro geral ao carregar dados:', error);
-      toast.error('Erro ao carregar dados');
+      if (user) toast.error('Erro ao carregar dados');
     } finally {
       setLoading(false);
     }
@@ -329,6 +332,8 @@ export const useSupabaseData = () => {
           .from('app_settings')
           .update({
             hero_image_url: settings.hero_image_url,
+            hero_video_url: settings.hero_video_url,
+            login_logo_url: settings.login_logo_url,
             title: settings.title,
             subtitle: settings.subtitle,
             badge: settings.badge,
@@ -350,6 +355,8 @@ export const useSupabaseData = () => {
           .from('app_settings')
           .insert({
             hero_image_url: settings.hero_image_url,
+            hero_video_url: settings.hero_video_url,
+            login_logo_url: settings.login_logo_url,
             title: settings.title,
             subtitle: settings.subtitle,
             badge: settings.badge,
@@ -376,9 +383,7 @@ export const useSupabaseData = () => {
   };
 
   useEffect(() => {
-    if (user) {
-      loadData();
-    }
+    loadData();
   }, [user]);
 
   return {

@@ -8,12 +8,15 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Trash2, Edit, Plus, Save, Loader2 } from 'lucide-react';
+import { Trash2, Edit, Plus, Save, Loader2, LogOut } from 'lucide-react';
 import { useSupabaseData, Service, Post, AppSettings } from '@/hooks/useSupabaseData';
+import { useAuth } from '@/hooks/useAuth';
 import ImageUpload from './ImageUpload';
 import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
 
 const AdminPanel = () => {
+  const { signOut } = useAuth();
   const {
     services,
     posts,
@@ -135,6 +138,18 @@ const AdminPanel = () => {
     setSaving(false);
   };
 
+  // Logout
+  const handleLogout = async () => {
+    if (confirm('Tem certeza que deseja sair?')) {
+      const { error } = await signOut();
+      if (error) {
+        toast.error('Erro ao fazer logout');
+      } else {
+        toast.success('Logout realizado com sucesso!');
+      }
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -147,9 +162,20 @@ const AdminPanel = () => {
   return (
     <div className="min-h-screen bg-black text-white p-6">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
-          Painel Administrativo
-        </h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+            Painel Administrativo
+          </h1>
+          <Button
+            onClick={handleLogout}
+            variant="outline"
+            size="sm"
+            className="border-red-600 text-red-400 hover:bg-red-600 hover:text-white"
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Sair
+          </Button>
+        </div>
 
         <Tabs defaultValue="services" className="space-y-6">
           <TabsList className="bg-gray-900 border-purple-500/20">
@@ -633,6 +659,34 @@ const AdminPanel = () => {
                     hero_image_url: url
                   })}
                   folder="hero"
+                />
+              </div>
+
+              <div>
+                <Label>Vídeo Hero (URL)</Label>
+                <Input
+                  value={editingSettings.hero_video_url || ''}
+                  onChange={(e) => setEditingSettings({
+                    ...editingSettings,
+                    hero_video_url: e.target.value
+                  })}
+                  placeholder="https://exemplo.com/video.mp4"
+                  className="bg-gray-800 border-gray-700"
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  Deixe vazio para usar apenas imagem
+                </p>
+              </div>
+
+              <div>
+                <Label>Logo do Login</Label>
+                <ImageUpload
+                  currentImage={editingSettings.login_logo_url}
+                  onImageUploaded={(url) => setEditingSettings({
+                    ...editingSettings,
+                    login_logo_url: url
+                  })}
+                  folder="logos"
                 />
               </div>
 

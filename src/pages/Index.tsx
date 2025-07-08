@@ -58,6 +58,7 @@ const Index = () => {
             {appSettings && (
               <HeroSection 
                 heroImage={appSettings.hero_image_url}
+                heroVideo={appSettings.hero_video_url}
                 title={appSettings.title}
                 subtitle={appSettings.subtitle}
                 badge={appSettings.badge}
@@ -79,6 +80,16 @@ const Index = () => {
                   <p className="text-gray-400 text-lg max-w-2xl mx-auto">
                     Descubra os tratamentos que vão realçar sua beleza natural
                   </p>
+                  <div className="flex justify-center mt-6">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => window.open('/login', '_self')}
+                      className="text-gray-400 hover:text-pink-300 border border-gray-600 hover:border-pink-500"
+                    >
+                      Fazer Login
+                    </Button>
+                  </div>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

@@ -19,7 +19,9 @@ export type Database = {
           badge: string | null
           created_at: string
           hero_image_url: string | null
+          hero_video_url: string | null
           id: string
+          login_logo_url: string | null
           primary_button_color: string | null
           primary_button_text: string | null
           secondary_button_text: string | null
@@ -31,7 +33,9 @@ export type Database = {
           badge?: string | null
           created_at?: string
           hero_image_url?: string | null
+          hero_video_url?: string | null
           id?: string
+          login_logo_url?: string | null
           primary_button_color?: string | null
           primary_button_text?: string | null
           secondary_button_text?: string | null
@@ -43,7 +47,9 @@ export type Database = {
           badge?: string | null
           created_at?: string
           hero_image_url?: string | null
+          hero_video_url?: string | null
           id?: string
+          login_logo_url?: string | null
           primary_button_color?: string | null
           primary_button_text?: string | null
           secondary_button_text?: string | null
