@@ -160,17 +160,17 @@ const AdminPanel = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white p-6">
+    <div className="min-h-screen bg-gray-950 text-gray-100 p-6">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold text-gray-100">
             Painel Administrativo
           </h1>
           <Button
             onClick={handleLogout}
             variant="outline"
             size="sm"
-            className="border-red-600 text-red-400 hover:bg-red-600 hover:text-white"
+            className="border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
           >
             <LogOut className="h-4 w-4 mr-2" />
             Sair
@@ -178,14 +178,14 @@ const AdminPanel = () => {
         </div>
 
         <Tabs defaultValue="services" className="space-y-6">
-          <TabsList className="bg-gray-900 border-purple-500/20">
-            <TabsTrigger value="services" className="data-[state=active]:bg-purple-600">
+          <TabsList className="bg-gray-800 border-gray-700">
+            <TabsTrigger value="services" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white">
               Serviços ({services.length})
             </TabsTrigger>
-            <TabsTrigger value="posts" className="data-[state=active]:bg-purple-600">
+            <TabsTrigger value="posts" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white">
               Posts ({posts.length})
             </TabsTrigger>
-            <TabsTrigger value="settings" className="data-[state=active]:bg-purple-600">
+            <TabsTrigger value="settings" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white">
               Configurações
             </TabsTrigger>
           </TabsList>
@@ -194,7 +194,7 @@ const AdminPanel = () => {
           <TabsContent value="services" className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold">Gerenciar Serviços</h2>
-              <Button onClick={handleNewService} className="bg-purple-600 hover:bg-purple-700">
+              <Button onClick={handleNewService} className="bg-gray-700 hover:bg-gray-600">
                 <Plus className="h-4 w-4 mr-2" />
                 Novo Serviço
               </Button>
@@ -202,12 +202,12 @@ const AdminPanel = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.map((service) => (
-                <Card key={service.id} className="bg-gray-900 border-gray-700">
+                <Card key={service.id} className="bg-gray-800 border-gray-600">
                   <CardHeader>
                     <div className="flex justify-between items-start">
                       <div>
-                        <CardTitle className="text-white">{service.title}</CardTitle>
-                        <Badge className="mt-2 bg-purple-600">{service.category}</Badge>
+                        <CardTitle className="text-gray-100">{service.title}</CardTitle>
+                        <Badge className="mt-2 bg-gray-600">{service.category}</Badge>
                       </div>
                       <Badge variant={service.status === 'Ativo' ? 'default' : 'secondary'}>
                         {service.status}
@@ -228,7 +228,7 @@ const AdminPanel = () => {
                       <Button
                         onClick={() => handleEditService(service)}
                         size="sm"
-                        className="bg-blue-600 hover:bg-blue-700"
+                        className="bg-gray-600 hover:bg-gray-500"
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -250,7 +250,7 @@ const AdminPanel = () => {
           <TabsContent value="posts" className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold">Gerenciar Posts</h2>
-              <Button onClick={handleNewPost} className="bg-purple-600 hover:bg-purple-700">
+              <Button onClick={handleNewPost} className="bg-gray-700 hover:bg-gray-600">
                 <Plus className="h-4 w-4 mr-2" />
                 Novo Post
               </Button>
@@ -258,10 +258,10 @@ const AdminPanel = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {posts.map((post) => (
-                <Card key={post.id} className="bg-gray-900 border-gray-700">
+                <Card key={post.id} className="bg-gray-800 border-gray-600">
                   <CardHeader>
-                    <CardTitle className="text-white">{post.title}</CardTitle>
-                    <Badge className="w-fit bg-pink-600">{post.category}</Badge>
+                    <CardTitle className="text-gray-100">{post.title}</CardTitle>
+                    <Badge className="w-fit bg-gray-600">{post.category}</Badge>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-2 gap-2">
@@ -292,7 +292,7 @@ const AdminPanel = () => {
                       <Button
                         onClick={() => handleEditPost(post)}
                         size="sm"
-                        className="bg-blue-600 hover:bg-blue-700"
+                        className="bg-gray-600 hover:bg-gray-500"
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -314,16 +314,16 @@ const AdminPanel = () => {
           <TabsContent value="settings" className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold">Configurações do App</h2>
-              <Button onClick={handleEditSettings} className="bg-purple-600 hover:bg-purple-700">
+              <Button onClick={handleEditSettings} className="bg-gray-700 hover:bg-gray-600">
                 <Edit className="h-4 w-4 mr-2" />
                 Editar Configurações
               </Button>
             </div>
 
             {appSettings && (
-              <Card className="bg-gray-900 border-gray-700">
+              <Card className="bg-gray-800 border-gray-600">
                 <CardHeader>
-                  <CardTitle className="text-white">Configurações Atuais</CardTitle>
+                  <CardTitle className="text-gray-100">Configurações Atuais</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {appSettings.hero_image_url && (
